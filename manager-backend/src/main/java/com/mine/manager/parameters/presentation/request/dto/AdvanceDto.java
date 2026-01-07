@@ -24,7 +24,7 @@ public class AdvanceDto {
     private Integer loadId;
 
     @NotNull(message = "{advance.receiptType.not-null}")
-    @Schema(description = "Tipo de recibo", example = "RECEIPT")
+    @Schema(description = "Tipo de recibo", example = "MANUAL")
     private ReceiptTypeEnum receiptType;
     @NotBlank(message = "{advance.receiptCode.not-blank}")
     @Size(max = 50, message = "{advance.receiptCode.size}")

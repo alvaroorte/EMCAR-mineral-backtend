@@ -35,6 +35,7 @@ public class AdvanceServiceImpl extends CRUDServiceImpl<Advance, Integer> implem
     @Override
     public AdvancePojo create(AdvanceDto dto) {
         Advance advance = convertToEntity(dto);
+        advance.setId(null);
         advance.setLoad(loadService.getById(dto.getLoadId()));
         advanceRepository.save(advance);
         return new AdvancePojo(advance);
