@@ -84,7 +84,9 @@ public class LiquidationPojo {
         this.createdAt = liquidation.getCreatedAt();
         this.updatedAt = liquidation.getUpdatedAt();
 
-        this.liquidationType = liquidation.getLiquidationTypeEnum().getValue();
+        if (liquidation.getLiquidationTypeEnum() != null) {
+            this.liquidationType = liquidation.getLiquidationTypeEnum().getValue();
+        }
 
         if (liquidation.getLoad() != null) {
             var load = liquidation.getLoad();

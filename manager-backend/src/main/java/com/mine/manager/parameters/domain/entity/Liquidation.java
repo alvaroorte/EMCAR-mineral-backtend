@@ -18,7 +18,7 @@ public class Liquidation extends Base {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Enumerated(EnumType.STRING)
-    @Column(length = 10)
+    @Column(length = 20)
     private LiquidationTypeEnum liquidationTypeEnum;
     @Column(precision = 5, scale = 2)
     private BigDecimal cajaNacional;

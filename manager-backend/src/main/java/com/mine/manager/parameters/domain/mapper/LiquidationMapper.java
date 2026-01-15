@@ -76,7 +76,7 @@ public class LiquidationMapper {
         liquidation.setSecondAdvance(dto.getSecondAdvance());
         liquidation.setTransportationBonus(dto.getTransportationBonus());
 
-
+        liquidation.setLiquidationTypeEnum(dto.getLiquidationType());
         return liquidation;
 
     }
