@@ -72,36 +72,19 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-    /*@Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Cache-Control",
-                "Content-Type",
-                "X-Requested-With",
-                "X-Gateway-Proxy"
-        ));
-
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }*/
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        String frontendUrl = env.getProperty("FRONTEND_URL");
+        String frontendUrls = env.getProperty("FRONTEND_URL");
 
-        if (frontendUrl != null && !frontendUrl.isBlank()) {
+        if (frontendUrls != null && !frontendUrls.isBlank()) {
+                List<String> origins = Arrays.stream(frontendUrls.split(","))
+                        .map(String::trim)
+                        .toList();
 
-            configuration.setAllowedOrigins(List.of(frontendUrl));
+                configuration.setAllowedOrigins(origins);
         } else {
             configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:8080"));
         }
