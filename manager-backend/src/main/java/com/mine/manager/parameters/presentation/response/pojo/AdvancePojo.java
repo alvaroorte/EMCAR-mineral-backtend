@@ -40,6 +40,7 @@ public class AdvancePojo {
         this.updatedBy = advance.getUpdatedBy();
         this.createdAt = advance.getCreatedAt();
         this.updatedAt = advance.getUpdatedAt();
+        this.date = advance.getDate();
         this.receiptType = advance.getReceiptType().getValue();
         this.receiptCode = advance.getReceiptCode();
         this.amount = advance.getAmount();
