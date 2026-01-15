@@ -1,5 +1,7 @@
 package com.mine.manager.common.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.mine.manager.exception.PropertyNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,14 +15,25 @@ public enum SupplierGroupEnum {
 
     private final String value;
 
-    public static String fromString(String text) {
-        if (text != null) {
-            for (SupplierGroupEnum type : SupplierGroupEnum.values()) {
-                if (text.equalsIgnoreCase(type.getValue())) {
-                    return type.getValue();
-                }
+    @JsonCreator
+    public static SupplierGroupEnum fromString(String text) {
+        if (text == null || text.isBlank()) {
+            return null;
+        }
+        try {
+            return SupplierGroupEnum.valueOf(text.toUpperCase());
+        } catch (IllegalArgumentException e) {
+        }
+        for (SupplierGroupEnum type : SupplierGroupEnum.values()) {
+            if (type.getValue().equalsIgnoreCase(text)) {
+                return type;
             }
         }
         throw new PropertyNotFoundException(text, "Grupo");
+    }
+
+    @JsonValue
+    public String toValue() {
+        return this.getValue();
     }
 }

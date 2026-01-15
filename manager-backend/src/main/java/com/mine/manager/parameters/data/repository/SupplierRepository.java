@@ -29,6 +29,10 @@ public interface SupplierRepository extends GenericRepository<Supplier, Integer>
             "(:surname IS NULL OR s.surname = :surname)")
     boolean existsByNameAndOptionalSurname(@Param("name") String name, @Param("surname") String surname);
 
+    boolean existsByDocumentNumber(String documentNumber);
+
+    boolean existsByDocumentNumberAndIdNot(String documentNumber, Integer id);
+
     @Query("SELECT COUNT(s) > 0 FROM Supplier s WHERE " +
             "s.name = :name AND " +
             "(:surname IS NULL OR s.surname = :surname) AND " +
