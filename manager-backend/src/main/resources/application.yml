@@ -10,5 +10,5 @@ spring:
 application:
   security:
     jwt:
-      expiration: 86400000
+      expiration: ${JWT_EXPIRATION:86400000}
 
