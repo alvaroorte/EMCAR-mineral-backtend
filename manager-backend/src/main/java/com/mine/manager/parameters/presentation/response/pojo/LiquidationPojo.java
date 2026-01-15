@@ -19,6 +19,7 @@ public class LiquidationPojo {
     private String updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String liquidationType;
     private Integer supplierId;
     private Integer lotId;
     private Integer materialId;
@@ -82,6 +83,8 @@ public class LiquidationPojo {
         this.updatedBy = liquidation.getUpdatedBy();
         this.createdAt = liquidation.getCreatedAt();
         this.updatedAt = liquidation.getUpdatedAt();
+
+        this.liquidationType = liquidation.getLiquidationTypeEnum().getValue();
 
         if (liquidation.getLoad() != null) {
             var load = liquidation.getLoad();
