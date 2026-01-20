@@ -19,7 +19,7 @@ public class SpanishEntityNameProvider {
         NAME_MAP.put("Cooperative", Entities.COOPERATIVE);
         NAME_MAP.put("Company", Entities.COMPANY);
         NAME_MAP.put("Mineral", Entities.MINERAL);
-        NAME_MAP.put("MineralType", Entities.MINERAL_TYPE);
+        NAME_MAP.put("TypeMineral", Entities.MINERAL_TYPE);
         NAME_MAP.put("Load", Entities.LOAD);
         NAME_MAP.put("Advance", Entities.ADVANCE);
         NAME_MAP.put("Liquidation", Entities.LIQUIDATION);

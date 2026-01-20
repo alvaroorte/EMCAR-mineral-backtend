@@ -2,16 +2,16 @@ package com.mine.manager.parameters.domain.service.Implements;
 
 import com.mine.manager.common.SpanishEntityNameProvider;
 import com.mine.manager.exception.DuplicateException;
+import com.mine.manager.exception.HasAsociatedEntityException;
 import com.mine.manager.parameters.data.repository.GenericRepository;
+import com.mine.manager.parameters.data.repository.LoadRepository;
 import com.mine.manager.parameters.data.repository.MineralRepository;
 import com.mine.manager.parameters.domain.entity.Mineral;
-import com.mine.manager.parameters.domain.entity.Mine;
 import com.mine.manager.parameters.domain.mapper.MineralMapper;
 import com.mine.manager.parameters.domain.service.Interfaces.MineralService;
 import com.mine.manager.parameters.presentation.request.dto.MineralDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -22,6 +22,7 @@ public class MineralServiceImpl extends CRUDServiceImpl<Mineral, Integer> implem
 
 
     private final MineralRepository mineralRepository;
+    private final LoadRepository loadRepository;
     private final MineralMapper mineralMapper;
     private static final String MINERAL = SpanishEntityNameProvider.getSpanishName(Mineral.class.getSimpleName());
 
@@ -58,5 +59,16 @@ public class MineralServiceImpl extends CRUDServiceImpl<Mineral, Integer> implem
 
 
         return mineralRepository.searchByFilters(cleanName, cleanDesc, cleanSome);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        Mineral toDelete = this.getById(id);
+        if (loadRepository.existsByMineralId(id)) {
+            throw new HasAsociatedEntityException(
+                    MINERAL, "Cargas"
+            );
+        }
+        mineralRepository.delete(toDelete);
     }
 }

@@ -12,6 +12,7 @@ public interface TypeMineralService extends CRUDService<TypeMineral, Integer> {
 
     TypeMineral update(Integer id, TypeMineralDto dto);
 
-
     List<TypeMineral> getFilteredForSelect(String name, String symbol, String some);
+
+    void delete(Integer id);
 }

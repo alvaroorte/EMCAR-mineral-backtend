@@ -12,6 +12,7 @@ public interface MineralService extends CRUDService<Mineral, Integer> {
 
     Mineral update(Integer id, MineralDto dto);
 
-
     List<Mineral> getFilteredForSelect(String name, String symbol, String some);
+
+    void delete(Integer id);
 }

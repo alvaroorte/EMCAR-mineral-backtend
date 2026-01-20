@@ -4,7 +4,10 @@ import com.mine.manager.common.SpanishEntityNameProvider;
 import com.mine.manager.common.SpecificationUtils;
 import com.mine.manager.common.enums.StateLoadEnum;
 import com.mine.manager.exception.EntityNotFoundException;
+import com.mine.manager.exception.HasAsociatedEntityException;
+import com.mine.manager.parameters.data.repository.AdvanceRepository;
 import com.mine.manager.parameters.data.repository.GenericRepository;
+import com.mine.manager.parameters.data.repository.LiquidationRepository;
 import com.mine.manager.parameters.data.repository.LoadRepository;
 import com.mine.manager.parameters.domain.entity.Load;
 import com.mine.manager.parameters.domain.entity.Lot;
@@ -43,6 +46,8 @@ public class LoadServiceImpl extends CRUDServiceImpl<Load, Integer> implements
     private final TypeMineralService typeMineralService;
     private final MineService mineService;
     private final CooperativeService cooperativeService;
+    private final AdvanceRepository advanceRepository;
+    private final LiquidationRepository liquidationRepository;
 
     private static final String LOAD = SpanishEntityNameProvider.getSpanishName(Load.class.getSimpleName());
 
@@ -116,6 +121,16 @@ public class LoadServiceImpl extends CRUDServiceImpl<Load, Integer> implements
     @Override
     public void delete(Integer id) {
         Load load = this.getById(id);
+        if (advanceRepository.existsByLoadIdAndActiveTrue(id)) {
+            throw new HasAsociatedEntityException(
+                    "No se puede eliminar la carga porque tiene anticipos asociados."
+            );
+        }
+        if (liquidationRepository.existsByLoadIdAndActiveTrue(id)) {
+            throw new HasAsociatedEntityException(
+                    "No se puede eliminar la carga porque tiene liquidaciones asociadas."
+            );
+        }
         load.setActive(false);
         loadRepository.save(load);
     }
