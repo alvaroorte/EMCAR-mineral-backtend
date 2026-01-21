@@ -14,9 +14,11 @@ import com.mine.manager.parameters.domain.entity.Load;
 import com.mine.manager.parameters.domain.mapper.LiquidationMapper;
 import com.mine.manager.parameters.domain.service.Interfaces.*;
 import com.mine.manager.parameters.presentation.request.dto.LiquidationDto;
+import com.mine.manager.parameters.presentation.request.dto.RoyaltyCalculationDto;
 import com.mine.manager.parameters.presentation.request.filter.LiquidationFilter;
 import com.mine.manager.parameters.presentation.response.pojo.LiquidationPojo;
 import com.mine.manager.parameters.presentation.response.pojo.PagePojo;
+import com.mine.manager.parameters.presentation.response.pojo.RoyaltyCalculationPojo;
 import com.mine.manager.util.FieldsFilterUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -29,7 +31,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -58,6 +59,12 @@ public class LiquidationServiceImpl extends CRUDServiceImpl<Liquidation, Integer
 
     private static final String LIQUIDATION = SpanishEntityNameProvider.getSpanishName(Liquidation.class.getSimpleName());
 
+
+    private static final BigDecimal LBS_PER_KG = new BigDecimal("2.2046223");
+    private static final BigDecimal GRAMS_PER_TROY_OZ = new BigDecimal("31.1035");
+    private static final BigDecimal ALICUOTA_ZINC = new BigDecimal("0.03");
+    private static final BigDecimal ALICUOTA_PLATA = new BigDecimal("0.036");
+    private static final BigDecimal ALICUOTA_PLOMO = new BigDecimal("0.03");
 
     @Override
     public List<LiquidationPojo> getLiquidations() {
@@ -228,6 +235,67 @@ public class LiquidationServiceImpl extends CRUDServiceImpl<Liquidation, Integer
         Page<Liquidation> filtered = liquidationRepository.findAll(spec, pageable);
         return liquidationMapper.fromPageToPagePojo(filtered);
     }
+
+    @Override
+    public RoyaltyCalculationPojo calculateRoyalties(RoyaltyCalculationDto request) {
+
+        BigDecimal weightInKilos = request.getDryMetricTonnes();
+
+        // -----------------------------------------------------
+        // 1. CÁLCULO ZINC
+        //[(Kilos * 2.2046) * (Ley/100) * Cotización * TC * 3%]
+        // -----------------------------------------------------
+        BigDecimal poundsZinc = weightInKilos.multiply(LBS_PER_KG);
+        BigDecimal finePoundsZinc = poundsZinc.multiply(request.getLawZinc().divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP));
+
+        BigDecimal grossValueZinc = finePoundsZinc
+                .multiply(request.getQuotationZinc())
+                .multiply(request.getExchangeRate());
+
+        BigDecimal royaltyZinc = grossValueZinc.multiply(ALICUOTA_ZINC).setScale(2, RoundingMode.HALF_UP);
+
+
+        // -----------------------------------------------------
+        // 2. CÁLCULO PLATA
+        // Fórmula: [(Peso Kilo / 1000) * (Ley * 100) / 31.1035 * Cot * TC * 3.6%]
+        // -----------------------------------------------------
+
+        // Paso A: Convertir input Kilos a Toneladas para la fórmula
+        BigDecimal weightInTonnes = weightInKilos.divide(new BigDecimal("1000"), 5, RoundingMode.HALF_UP);
+
+        // Paso B: Gramos de plata (Toneladas * (Ley * 100))
+        BigDecimal gramsSilver = weightInTonnes.multiply(request.getLawSilver().multiply(new BigDecimal("100")));
+
+        // Paso C: Onzas Troy
+        BigDecimal troyOuncesSilver = gramsSilver.divide(GRAMS_PER_TROY_OZ, 4, RoundingMode.HALF_UP);
+
+        // Paso D: Valor Bruto
+        BigDecimal grossValueSilver = troyOuncesSilver
+                .multiply(request.getQuotationSilver())
+                .multiply(request.getExchangeRate());
+
+        BigDecimal royaltySilver = grossValueSilver.multiply(ALICUOTA_PLATA).setScale(2, RoundingMode.HALF_UP);
+
+
+        // -----------------------------------------------------
+        // 3. CÁLCULO PLOMO
+        // -----------------------------------------------------
+        BigDecimal poundsLead = weightInKilos.multiply(LBS_PER_KG);
+        BigDecimal finePoundsLead = poundsLead.multiply(request.getLawLead().divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP));
+
+        BigDecimal grossValueLead = finePoundsLead
+                .multiply(request.getQuotationLead())
+                .multiply(request.getExchangeRate());
+
+        BigDecimal royaltyLead = grossValueLead.multiply(ALICUOTA_PLOMO).setScale(2, RoundingMode.HALF_UP);
+
+        return RoyaltyCalculationPojo.builder()
+                .royaltyZinc(royaltyZinc)
+                .royaltySilver(royaltySilver)
+                .royaltyLead(royaltyLead)
+                .build();
+    }
+
 
     @Override
     public byte[] generateLiquidationPdf(Integer idLiquidation) {

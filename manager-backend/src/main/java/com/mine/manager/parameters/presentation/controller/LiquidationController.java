@@ -3,9 +3,11 @@ package com.mine.manager.parameters.presentation.controller;
 import com.mine.manager.parameters.domain.entity.Liquidation;
 import com.mine.manager.parameters.domain.service.Interfaces.LiquidationService;
 import com.mine.manager.parameters.presentation.request.dto.LiquidationDto;
+import com.mine.manager.parameters.presentation.request.dto.RoyaltyCalculationDto;
 import com.mine.manager.parameters.presentation.request.filter.LiquidationFilter;
 import com.mine.manager.parameters.presentation.response.pojo.LiquidationPojo;
 import com.mine.manager.parameters.presentation.response.pojo.PagePojo;
+import com.mine.manager.parameters.presentation.response.pojo.RoyaltyCalculationPojo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -158,6 +160,14 @@ public class LiquidationController {
                         "inline; filename=liquidation_report.pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
+    }
+
+    @PostMapping("/royalties")
+    public ResponseEntity<RoyaltyCalculationPojo> calculateRoyalties(
+            @Valid @RequestBody RoyaltyCalculationDto request) {
+
+        RoyaltyCalculationPojo response = liquidationService.calculateRoyalties(request);
+        return ResponseEntity.ok(response);
     }
 }
 

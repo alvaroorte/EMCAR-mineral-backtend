@@ -2,9 +2,12 @@ package com.mine.manager.parameters.domain.service.Interfaces;
 
 import com.mine.manager.parameters.domain.entity.Liquidation;
 import com.mine.manager.parameters.presentation.request.dto.LiquidationDto;
+import com.mine.manager.parameters.presentation.request.dto.RoyaltyCalculationDto;
 import com.mine.manager.parameters.presentation.request.filter.LiquidationFilter;
 import com.mine.manager.parameters.presentation.response.pojo.LiquidationPojo;
 import com.mine.manager.parameters.presentation.response.pojo.PagePojo;
+import com.mine.manager.parameters.presentation.response.pojo.RoyaltyCalculationPojo;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -26,5 +29,7 @@ public interface LiquidationService extends CRUDService<Liquidation, Integer> {
 
     PagePojo<LiquidationPojo> getByPageAndFilters(int page, int size, String sortBy,
                                                   String sortOrder, LiquidationFilter filter);
+
+    RoyaltyCalculationPojo calculateRoyalties(@Valid RoyaltyCalculationDto request);
 }
 
