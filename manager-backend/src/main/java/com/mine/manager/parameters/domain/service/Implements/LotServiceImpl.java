@@ -54,11 +54,11 @@ public class LotServiceImpl extends CRUDServiceImpl<Lot, Integer> implements
             throw new DuplicateException(LOT, "prefijo y numero inicial", StringUtil.concatenate(dto.getPrefix(),
                     dto.getInitialDocNumber().toString(), " "));
         }
-        if (lotRepository.findFirstByAssignmentAndStateTrueAndActiveTrue(LotTypeEnum.RECEIPT).isPresent()) {
+        if (lotRepository.findFirstByAssignmentAndStateTrueAndActiveTrue(LotTypeEnum.RECEIPT).isPresent() && dto.getAssignment().equals(LotTypeEnum.RECEIPT)) {
             throw new DuplicateException("Ya existe un lote activo para la numeración de Recibos.");
         }
         Lot lot = convertToEntity(dto);
-                return lotMapper.toPojo(lotRepository.save(lot));
+        return lotMapper.toPojo(lotRepository.save(lot));
     }
 
 
@@ -93,8 +93,8 @@ public class LotServiceImpl extends CRUDServiceImpl<Lot, Integer> implements
 
     @Override
     public LotPojo getLotPojoById(Integer id) {
-       Lot lot = this.getLotById(id);
-       return lotMapper.toPojo(lot);
+        Lot lot = this.getLotById(id);
+        return lotMapper.toPojo(lot);
     }
 
     @Override

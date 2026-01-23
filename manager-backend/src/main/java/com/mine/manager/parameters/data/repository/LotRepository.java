@@ -19,4 +19,8 @@ public interface LotRepository extends GenericRepository<Lot, Integer> {
     List<Lot> findAllByActiveIsTrue();
 
     Optional<Lot> findFirstByAssignmentAndStateTrueAndActiveTrue(LotTypeEnum assignment);
+
+    Boolean existsByDescriptionIgnoreCase(String name);
+
+    Boolean existsByDescriptionIgnoreCaseAndIdNot(String name, Integer id);
 }

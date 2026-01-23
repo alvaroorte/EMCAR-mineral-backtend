@@ -9,9 +9,9 @@ import java.util.List;
 
 @Repository
 public interface TypeMineralRepository extends GenericRepository<TypeMineral, Integer> {
-    Boolean existsByName(String name);
+    Boolean existsByNameIgnoreCase(String name);
 
-    Boolean existsByNameAndIdNot(String name, Integer id);
+    Boolean existsByNameIgnoreCaseAndIdNot(String name, Integer id);
 
     @Query("""
             select tm from TypeMineral tm

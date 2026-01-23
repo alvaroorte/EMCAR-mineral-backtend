@@ -9,8 +9,8 @@ import java.util.List;
 
 @Repository
 public interface MineralRepository extends GenericRepository<Mineral, Integer> {
-    Boolean existsBySymbol(String symbol);
-    Boolean existsBySymbolAndIdNot(String symbol, Integer id);
+    Boolean existsBySymbolIgnoreCase(String symbol);
+    Boolean existsBySymbolIgnoreCaseAndIdNot(String symbol, Integer id);
 
     @Query("""
                 SELECT m FROM Mineral m

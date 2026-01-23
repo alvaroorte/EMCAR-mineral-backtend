@@ -30,7 +30,6 @@ public class SupplierPojo {
     private String fullName;
     private String documentNumber;
     private String address;
-    private String supplierGroup;
     private String expeditionPlace;
 
     public SupplierPojo(Supplier supplier) {
@@ -45,7 +44,6 @@ public class SupplierPojo {
         this.fullName = StringUtil.concatenate(supplier.getName(),supplier.getSurname()," ").trim();
         this.documentNumber = supplier.getDocumentNumber();
         this.address = supplier.getAddress();
-        this.supplierGroup = supplier.getSupplierGroup().getValue();
         this.expeditionPlace = supplier.getExpeditionPlace();
     }
 }

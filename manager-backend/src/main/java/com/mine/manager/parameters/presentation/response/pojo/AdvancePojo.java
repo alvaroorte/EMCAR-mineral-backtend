@@ -22,7 +22,6 @@ public class AdvancePojo {
     private String updatedBy;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String receiptType;
     private String receiptCode;
     private LocalDate date;
     private BigDecimal amount;
@@ -41,7 +40,6 @@ public class AdvancePojo {
         this.createdAt = advance.getCreatedAt();
         this.updatedAt = advance.getUpdatedAt();
         this.date = advance.getDate();
-        this.receiptType = advance.getReceiptType().getValue();
         this.receiptCode = advance.getReceiptCode();
         this.amount = advance.getAmount();
         this.concept = advance.getConcept();
