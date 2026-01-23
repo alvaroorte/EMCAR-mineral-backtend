@@ -2,7 +2,6 @@ package com.mine.manager.parameters.domain.entity;
 
 import com.mine.manager.common.enums.PaymentChanelEnum;
 import com.mine.manager.common.enums.PaymentTypeEnum;
-import com.mine.manager.common.enums.ReceiptTypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +19,6 @@ public class Advance extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(length = 30, nullable = false)
-    private ReceiptTypeEnum receiptType;
     @ManyToOne
     @JoinColumn(name = "lot_id", nullable = false)
     private Lot lot;

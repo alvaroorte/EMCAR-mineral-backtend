@@ -1,6 +1,5 @@
 package com.mine.manager.parameters.domain.entity;
 
-import com.mine.manager.common.enums.SupplierGroupEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,27 +10,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name = "suppliers", schema = "mine")
-public class Supplier extends Base{
+public class Supplier extends Base {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-  @Column(length = 250, nullable = false)
-  private String name;
+    @Column(length = 250, nullable = false)
+    private String name;
 
-  @Column(length = 250)
-  private String surname;
+    @Column(length = 250)
+    private String surname;
 
-  @Column(length = 150, unique = true)
-  private String documentNumber;
+    @Column(length = 150, unique = true)
+    private String documentNumber;
 
-  @Column(length = 200)
-  private String address;
+    @Column(length = 200)
+    private String address;
 
-  @Column(length = 20, nullable = false)
-  private SupplierGroupEnum supplierGroup;
-
-  @Column(length = 20/*, nullable = false*/)
-  private String expeditionPlace;
+    @Column(length = 20/*, nullable = false*/)
+    private String expeditionPlace;
 }

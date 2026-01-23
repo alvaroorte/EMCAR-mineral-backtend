@@ -31,7 +31,7 @@ public class MineServiceImpl extends CRUDServiceImpl<Mine, Integer> implements M
 
     @Override
     public Mine create(MineDto dto) {
-        if(mineRepository.existsByName(dto.getName())){
+        if(mineRepository.existsByNameIgnoreCase(dto.getName())){
             throw new DuplicateException(MINE_ENTITY, "Nombre", dto.getName());
         }
         return super.create(mineMapper.fromDto(dto));
@@ -39,7 +39,7 @@ public class MineServiceImpl extends CRUDServiceImpl<Mine, Integer> implements M
 
     @Override
     public Mine update(Integer id, MineDto dto) {
-        if(mineRepository.existsByNameAndIdNot(dto.getName(), id)){
+        if(mineRepository.existsByNameIgnoreCaseAndIdNot(dto.getName(), id)){
             throw new DuplicateException(MINE_ENTITY, "Nombre", dto.getName());
         }
         return mineRepository.save(mineMapper.fromDto(dto, super.getById(id)));

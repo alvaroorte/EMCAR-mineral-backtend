@@ -35,7 +35,7 @@ public class MineralServiceImpl extends CRUDServiceImpl<Mineral, Integer> implem
 
     @Override
     public Mineral create(MineralDto dto) {
-        if (mineralRepository.existsBySymbol(dto.getSymbol())) {
+        if (mineralRepository.existsBySymbolIgnoreCase(dto.getSymbol())) {
             throw new DuplicateException(MINERAL, "Símbolo", dto.getSymbol());
         }
         return super.create(mineralMapper.fromDto(dto));
@@ -44,7 +44,7 @@ public class MineralServiceImpl extends CRUDServiceImpl<Mineral, Integer> implem
 
     @Override
     public Mineral update(Integer id, MineralDto dto) {
-        if (mineralRepository.existsBySymbolAndIdNot(dto.getSymbol(), id)) {
+        if (mineralRepository.existsBySymbolIgnoreCaseAndIdNot(dto.getSymbol(), id)) {
             throw new DuplicateException(MINERAL, "Símbolo", dto.getSymbol());
         }
         return mineralRepository.save(mineralMapper.fromDto(dto, super.getById(id)));

@@ -35,7 +35,7 @@ public class TypeMineralServiceImpl extends CRUDServiceImpl<TypeMineral, Integer
 
     @Override
     public TypeMineral create(TypeMineralDto dto) {
-        if (typeMineralRepository.existsByName(dto.getName())) {
+        if (typeMineralRepository.existsByNameIgnoreCase(dto.getName())) {
             throw new DuplicateException(TYPE_MINERAL, "Nombre", dto.getName());
         }
         return super.create(typeMineralMapper.fromDto(dto));
@@ -44,7 +44,7 @@ public class TypeMineralServiceImpl extends CRUDServiceImpl<TypeMineral, Integer
 
     @Override
     public TypeMineral update(Integer id, TypeMineralDto dto) {
-        if (typeMineralRepository.existsByNameAndIdNot(dto.getName(), id)) {
+        if (typeMineralRepository.existsByNameIgnoreCaseAndIdNot(dto.getName(), id)) {
             throw new DuplicateException(TYPE_MINERAL, "Nombre", dto.getName());
         }
         return typeMineralRepository.save(typeMineralMapper.fromDto(dto, super.getById(id)));
