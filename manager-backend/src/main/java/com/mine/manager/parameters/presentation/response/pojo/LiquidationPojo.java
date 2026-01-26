@@ -24,12 +24,14 @@ public class LiquidationPojo {
     private Integer supplierId;
     private Integer lotId;
     private Integer mineralId;
+    private Integer typeMineralId;
     private Integer mineId;
     private Integer cooperativeId;
     private String externalLot;
     private String correlativeLotCode;
     private String supplierName;
     private String mineralName;
+    private String typeMineralName;
     private String mineName;
     private String cooperativeName;
 
@@ -108,6 +110,11 @@ public class LiquidationPojo {
             if (load.getMineral() != null) {
                 this.mineralId = load.getMineral().getId();
                 this.mineralName = load.getMineral().getName();
+            }
+
+            if (load.getTypeMineral() != null) {
+                this.typeMineralId = load.getTypeMineral().getId();
+                this.typeMineralName = load.getTypeMineral().getName();
             }
 
             if (load.getMine() != null) {

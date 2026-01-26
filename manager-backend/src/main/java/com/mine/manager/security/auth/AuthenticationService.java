@@ -54,7 +54,9 @@ public class AuthenticationService {
     );
     extraClaims.put("userId", user.getId());
     var jwtToken = jwtService.generateToken(extraClaims, user);
-    return AuthenticationResponse.builder().token(jwtToken).build();
+    return AuthenticationResponse.builder().token(jwtToken).fullname(String.format(
+            "%s %s",user.getName(),user.getSurname()
+    )).build();
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
