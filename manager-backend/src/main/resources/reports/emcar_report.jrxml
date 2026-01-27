@@ -174,9 +174,10 @@
     co.print_cooperative_contribution, 
     co.print_fedecomin, 
     co.print_fencomin, 
-    co.print_mining_royalties 
-
-FROM mine.liquidations lq
+    co.print_mining_royalties,     
+    
+   c.social_reason
+ FROM mine.liquidations lq
 JOIN mine.loads ld           ON ld.id = lq.load_id
 JOIN mine.suppliers s        ON s.id = ld.supplier_id
 JOIN mine.lots lo            ON lo.id = ld.lot_id
@@ -184,6 +185,7 @@ JOIN mine.minerals m        ON m.id = ld.mineral_id
 JOIN mine.type_minerals tm  ON tm.id = ld.type_mineral_id
 LEFT JOIN mine.mines mi      ON mi.id = ld.mine_id
 LEFT JOIN mine.cooperatives co ON co.id = ld.cooperative_id
+LEFT JOIN mine.companies c ON TRUE
 
 WHERE lq.active = true
   AND lq.id = CAST($P{idLiquidation} AS INTEGER)]]>
@@ -525,6 +527,11 @@ WHERE lq.active = true
 		<property name="com.jaspersoft.studio.field.label" value="print_mining_royalties"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="cooperatives"/>
 	</field>
+	<field name="social_reason" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="social_reason"/>
+		<property name="com.jaspersoft.studio.field.label" value="social_reason"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="companies"/>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -568,22 +575,6 @@ WHERE lq.active = true
 				<text><![CDATA[]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1" width="440" height="28" backcolor="rgba(255, 255, 255, 0.0)" uuid="81994203-c71c-45fc-8f32-901fd0e6a559">
-					<property name="com.jaspersoft.studio.unit.spacingBefore" value="px"/>
-				</reportElement>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font size="18" isBold="true"/>
-					<paragraph spacingBefore="3"/>
-				</textElement>
-				<text><![CDATA[COMERCIALIZADORA CARDENAS COMCAR]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="0" y="28" width="440" height="28" backcolor="rgba(255, 255, 255, 0.0)" uuid="13a879cf-2889-4466-ad5b-abd10e12e7e1"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -596,6 +587,23 @@ WHERE lq.active = true
 				</textElement>
 				<text><![CDATA[POTOSI - BOLIVIA]]></text>
 			</staticText>
+			<textField textAdjust="ScaleFont" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement x="0" y="1" width="440" height="27" uuid="848f6887-7468-4f97-923e-8139ab7979d6">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="3.0"/>
+					<topPen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{social_reason} != null ? $F{social_reason}.toUpperCase() : "EMPRESA NO CONFIGURADA"]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -843,7 +851,7 @@ WHERE lq.active = true
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<paragraph firstLineIndent="3"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{metric_wet_kilograms}/1000]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{metric_wet_kilograms}.divide(new java.math.BigDecimal(1000))]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="71" width="100" height="20" uuid="f16b1c14-4865-4953-9277-336ea92141d2">
