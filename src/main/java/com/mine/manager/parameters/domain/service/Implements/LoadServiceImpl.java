@@ -16,7 +16,6 @@ import com.mine.manager.parameters.presentation.request.dto.LoadDto;
 import com.mine.manager.parameters.presentation.request.filter.LoadFilter;
 import com.mine.manager.parameters.presentation.response.pojo.CorrelativePojo;
 import com.mine.manager.parameters.presentation.response.pojo.LoadPojo;
-import com.mine.manager.parameters.presentation.response.pojo.LotPojo;
 import com.mine.manager.parameters.presentation.response.pojo.PagePojo;
 import com.mine.manager.util.CodeGeneratorUtil;
 import com.mine.manager.util.FieldsFilterUtil;
@@ -136,8 +135,8 @@ public class LoadServiceImpl extends CRUDServiceImpl<Load, Integer> implements
                     "No se puede eliminar la carga porque tiene liquidaciones asociadas."
             );
         }
-        Lot lot = load.getLot();
-        /*if (lot.getCurrentDocNumber() != null && lot.getCurrentDocNumber().equals(load.getCurrentDocNumber())) {
+        /*Lot lot = load.getLot();
+        if (lot.getCurrentDocNumber() != null && lot.getCurrentDocNumber().equals(load.getCurrentDocNumber())) {
 
             int nextDocNumber = lot.getCurrentDocNumber() - 1;
             if (nextDocNumber < lot.getInitialDocNumber()) {
@@ -149,6 +148,7 @@ public class LoadServiceImpl extends CRUDServiceImpl<Load, Integer> implements
             lotRepository.save(lot);
         }*/
         load.setActive(false);
+        load.setState(StateLoadEnum.INACTIVE);
         loadRepository.save(load);
     }
 

@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum StateLoadEnum {
 
     PENDING("Pendiente"),
-    LIQUIDATED("Liquidado");
+    LIQUIDATED("Liquidado"),
+    INACTIVE("Eliminado");
 
     private final String value;
 }
